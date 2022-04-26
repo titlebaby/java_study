@@ -2,6 +2,15 @@ package String.demo;
 
 public class String2 {
     public static void main(String[] args) {
+        //=========================
+        /**
+        1. equals 区分大小写，判断内容是否相等
+         2. equalsIgnoreCase 忽略大小写的判断内容是否相等
+         3. length 获取字符的个数，字符串的长度
+         4. indexOf 获取字符再字符串中第1次出现的索引，索引从0开始，如果找不到，返回-1
+         5. charAt 获取某索引处的字符，注意不能使用str[index] 这种方式
+         **/
+        //================================
         //1. StringBuffer 的直接父类是 AbstractStringBuilder
         //2. StringBuffer 实现了serializable 即StringBuffer 的对象可以串行化
         //3. 在父类中 AbstractStringBuilder 有属性char[] value （存放在堆中,该value数组 存放 字符串内容，引出存放在堆中的） 不是final
