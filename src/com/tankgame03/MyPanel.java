@@ -25,10 +25,13 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
 
     public MyPanel() {
         hero = new Hero(100, 100);//初始化自己坦克
+        hero.setSpeed(5);
         //初始化
         for (int i = 0; i < enemyTankSize; i++) {
             EnemyTank enemyTank = new EnemyTank((100 * (i + 1)), 0);
             enemyTank.setDirect(2); //设置敌人坦克方向
+            //启动敌人坦克线程，让他动动起来
+            new Thread(enemyTank).start();
             //给该enemyTank添加一颗子弹
             Shot shot = new Shot(enemyTank.getX() + 20, enemyTank.getY() + 60, enemyTank.getDirect());
             enemyTank.enemyShot.add(shot);
@@ -47,12 +50,22 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
         //drawTank(hero.getX() + 60, hero.getY(), g, 0,0);
 
         //画子弹
-        if (hero.shot != null && hero.shot.isLive) {
+      /*  if (hero.shot != null && hero.shot.isLive) {
             System.out.println("字段被绘制~~");
             g.fillRect(hero.shot.x, hero.shot.y, 1, 1);
+        }*/
+        //可以打多个子弹，按一次添加个子弹，每次再重（这里是个多线程）绘每颗子弹
+        for (int i = 0; i < hero.shots.size(); i++) {
+            Shot shot = hero.shots.get(i);
+            if (shot != null && shot.isLive) {
+                g.fillRect(shot.x, shot.y, 1, 1);
+            } else {
+                hero.shots.remove(shot);
+            }
+
         }
 
-        //画出敌人的子弹
+        //画出敌人的坦克
         for (int i = 0; i < enemyTanks.size(); i++) {
 
             EnemyTank enemyTank = enemyTanks.get(i);
@@ -177,22 +190,35 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             hero.setDirect(2);
-            hero.moveDown();
+            if (hero.getY() + 60 < 750) {
+                hero.moveDown();
+            }
 
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             hero.setDirect(3);
-            hero.moveLift();
+            if (hero.getX() > 0) {
+                hero.moveLift();
+            }
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             hero.setDirect(1);
-            hero.moveRight();
+            if (hero.getX() + 60 < 1000) {
+                hero.moveRight();
+            }
+
         } else if (e.getKeyCode() == KeyEvent.VK_UP) {
             hero.setDirect(0);
-            hero.moveUp();
+            if (hero.getY() > 0) {
+                hero.moveUp();
+            }
+
         }
 
         if (e.getKeyCode() == KeyEvent.VK_J) {
             System.out.println("用户按下J");
-            hero.shotEnemyTank();
+//            if (hero.shot == null || !hero.shot.isLive) {
+                hero.shotEnemyTank();
+//            }
+
         }
         this.repaint();
     }
