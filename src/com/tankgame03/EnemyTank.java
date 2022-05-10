@@ -3,7 +3,7 @@ package com.tankgame03;
 import java.util.Vector;
 
 public class EnemyTank extends Tank implements Runnable {
-    boolean isLive = true;
+ //   boolean isLive = true;
     Vector<Shot> enemyShot = new Vector<>();
 
     public EnemyTank(int x, int y) {

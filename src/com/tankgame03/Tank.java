@@ -5,7 +5,7 @@ public class Tank {
     private int y; // 坦克的纵坐标
     private int direct=0; //坦克方向
     private int speed=1; //速度 像素
-
+    boolean isLive = true;
     public int getSpeed() {
         return speed;
     }

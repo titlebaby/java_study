@@ -24,7 +24,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
     int enemyTankSize = 3;
 
     public MyPanel() {
-        hero = new Hero(100, 100);//初始化自己坦克
+        hero = new Hero(500, 100);//初始化自己坦克
         hero.setSpeed(5);
         //初始化
         for (int i = 0; i < enemyTankSize; i++) {
@@ -46,7 +46,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
         //绘画方法
         super.paint(g);
         g.fillRect(0, 0, 1000, 700);
-        drawTank(hero.getX(), hero.getY(), g, hero.getDirect(), 1);
+        if(hero != null && hero.isLive) {
+            drawTank(hero.getX(), hero.getY(), g, hero.getDirect(), 1);
+        }
         //drawTank(hero.getX() + 60, hero.getY(), g, 0,0);
 
         //画子弹
@@ -156,8 +158,8 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
                 break;
         }
     }
-
-    public static void hitTank(Shot s, EnemyTank enemyTank) {
+    //一个子弹有没有击中坦克
+    public static void hitTank(Shot s, Tank enemyTank) {
         switch (enemyTank.getDirect()) {
             case 0:
             case 2:
@@ -179,6 +181,31 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
 
         }
 
+    }
+
+    public void hitHero(){
+        for (int i = 0; i < enemyTanks.size(); i++) {
+            EnemyTank enemyTank = enemyTanks.get(i);
+            for (int j = 0; j < enemyTank.enemyShot.size(); j++) {
+                //取出子弹
+                Shot shot = enemyTank.enemyShot.get(j);
+                //判断是否击中坦克
+                if (hero.isLive && shot.isLive) {
+                    hitTank(shot, hero);
+                }
+            }
+
+        }
+    }
+
+    public void hitEnemyTank(){
+        //单科子弹
+        if (hero.shot != null && hero.shot.isLive) {
+            for (int i = 0; i < enemyTanks.size(); i++) {
+                EnemyTank enemyTank = enemyTanks.get(i);
+                hitTank(hero.shot, enemyTank);
+            }
+        }
     }
 
     @Override
@@ -238,12 +265,9 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
                 e.printStackTrace();
             }
             // 判断是否击中敌方
-            if (hero.shot != null && hero.shot.isLive) {
-                for (int i = 0; i < enemyTanks.size(); i++) {
-                    EnemyTank enemyTank = enemyTanks.get(i);
-                    hitTank(hero.shot, enemyTank);
-                }
-            }
+            hitEnemyTank();
+            //敌人坦克是否击中我们
+            hitHero();
             this.repaint();
         }
 
