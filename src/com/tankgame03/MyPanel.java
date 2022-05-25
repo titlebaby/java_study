@@ -23,12 +23,16 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
     Vector<EnemyTank> enemyTanks = new Vector<>();
     int enemyTankSize = 3;
 
-    public MyPanel() {
+    public MyPanel(String key) {
+        //将mypanel对象设置给recorder
+        Recorder.setEnemyTanks(enemyTanks);
         hero = new Hero(500, 100);//初始化自己坦克
         hero.setSpeed(5);
         //初始化
         for (int i = 0; i < enemyTankSize; i++) {
             EnemyTank enemyTank = new EnemyTank((100 * (i + 1)), 0);
+            // 将enemyTanks 设置给enemyTank
+            enemyTank.setEnemyTanks(enemyTanks);
             enemyTank.setDirect(2); //设置敌人坦克方向
             //启动敌人坦克线程，让他动动起来
             new Thread(enemyTank).start();
@@ -39,6 +43,22 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
             enemyTanks.add(enemyTank);
 
         }
+
+        //初始化图片
+        //播放音乐
+//        new AePlayWave("src\\qqq.wav").start();
+    }
+    //编写方法，现实我方击毁敌人坦克得信息
+    public void  showInfo(Graphics g){
+        //画出玩家得总成绩
+        g.setColor(Color.BLACK);
+        Font font = new Font("宋体", Font.BOLD, 25);
+        g.setFont(font);
+
+        g.drawString("你累计击毁敌方坦克数",1020,30);
+        drawTank(1020,60,g,0,0);//画一个地方坦克
+        g.setColor(Color.BLACK); //重置成黑色得笔
+        g.drawString(Recorder.getAllAEnemyTankNum() +"",1080,100);
     }
 
     @Override
@@ -46,6 +66,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
         //绘画方法
         super.paint(g);
         g.fillRect(0, 0, 1000, 700);
+        showInfo(g);
         if(hero != null && hero.isLive) {
             drawTank(hero.getX(), hero.getY(), g, hero.getDirect(), 1);
         }
@@ -158,7 +179,7 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
                 break;
         }
     }
-    //一个子弹有没有击中坦克
+    //一个子弹有没有击中坦克(我方或者敌方)
     public static void hitTank(Shot s, Tank enemyTank) {
         switch (enemyTank.getDirect()) {
             case 0:
@@ -167,6 +188,13 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
                         && s.y > enemyTank.getY() && s.y < enemyTank.getY() + 60) {
                     s.isLive = false;
                     enemyTank.isLive = false;
+//                    enemyTank.remove(enemyTank);
+//                    Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+//                    bombs.add(bomb);
+
+                    if (enemyTank instanceof EnemyTank) {
+                        Recorder.addAllAEnemyTankNum();
+                    }
 
                 }
                 break;
@@ -176,6 +204,12 @@ public class MyPanel extends JPanel implements KeyListener, Runnable {
                         && s.y > enemyTank.getY() && s.y < enemyTank.getY() + 40) {
                     s.isLive = false;
                     enemyTank.isLive = false;
+//                    enemyTank.remove(enemyTank);
+//                    Bomb bomb = new Bomb(enemyTank.getX(), enemyTank.getY());
+//                    bombs.add(bomb);
+                    if (enemyTank instanceof EnemyTank) {
+                        Recorder.addAllAEnemyTankNum();
+                    }
                 }
                 break;
 
