@@ -8,10 +8,17 @@ public class Dog {
     public Dog() {
 
     }
-    public Dog(Integer agree) {
+    public Dog(int agree) {
         this.agree = agree;
 //        this.age = age;
     }
+
+
+    private Dog(Integer agree,Integer age) {
+        this.agree = agree;
+        this.age = age;
+    }
+
 
     public void hi() {
         System.out.println("hi 招财猫");
@@ -19,5 +26,13 @@ public class Dog {
 
     public void cry() {
         System.out.println("招财猫, 喵喵叫~");
+    }
+
+    @Override
+    public String toString() {
+        return "Dog{" +
+                "agree=" + agree +
+                ", age=" + age +
+                '}';
     }
 }
