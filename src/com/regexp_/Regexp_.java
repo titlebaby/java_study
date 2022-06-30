@@ -16,5 +16,31 @@ public class Regexp_ {
         while (matcher.find()) {
             System.out.println( "找到="+matcher.group(0));
         }
+
+        // 使用正则表达式去重
+
+        String str1= "我我要学学学编程java";
+
+        String content = Pattern.compile("(.)\\1+").matcher(str1).replaceAll("$1");
+        System.out.println(content);
+
+
+        String str2 = "2000年5月JDK1.3,成功将JDK1.4推出";
+        String jdk = str2.replaceAll("JDK1.3|JDK1.4", "JDK");
+        System.out.println(jdk);
+
+        String str3 = "13883254689";
+        boolean matches = str3.matches("1(38|39)\\d(8)");
+        System.out.println(matches);
+
+
+        String str4 = "hello#abc-jdk~背景";
+        String[] split = str4.split("#|-|~|\\d+");
+        for (String s : split) {
+            System.out.println(s);
+        }
+
+
     }
+
 }
