@@ -1,7 +1,9 @@
 package com.jdbc;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -39,6 +41,69 @@ public class DBUtils_SUE {
         }
         JDBCUtilsByDruid.close(null, null, connection);
 
+    }
+
+
+    // 使用apache-DBUtils + druid  返回单条记录
+    @Test
+    public void testQuerySingle() throws SQLException {
+        Connection connection = JDBCUtilsByDruid.getConnect();
+
+        //2. 使用DBUtils 类和接口， 先引入DBUtils相关jar 加入到本项目
+
+        // 3. 创建 QueryRunner
+        QueryRunner queryRunner = new QueryRunner();
+        // 4.就可以执行查询
+        String sql = "select * from students where id = ?";
+        // 我们知道是单行 BeanHandler
+        Students student = queryRunner.query(connection, sql, new BeanHandler<>(Students.class), 1);
+        System.out.println(student);
+        JDBCUtilsByDruid.close(null, null, connection);
+
+    }
+
+    // 使用apache-DBUtils + druid  返回单条记录
+    @Test
+    public void testQueryScalar() throws SQLException {
+        Connection connection = JDBCUtilsByDruid.getConnect();
+
+        //2. 使用DBUtils 类和接口， 先引入DBUtils相关jar 加入到本项目
+
+        // 3. 创建 QueryRunner
+        QueryRunner queryRunner = new QueryRunner();
+        // 4.就可以执行查询
+        String sql = "select name from students where id = ?";
+
+        // 因为返回的是一个对象
+        Object object = queryRunner.query(connection, sql, new ScalarHandler<>(), 1);
+        System.out.println(object);
+
+
+        JDBCUtilsByDruid.close(null, null, connection);
+
+    }
+
+    // 使用apache-DBUtils + druid dml update insert delete
+    @Test
+    public void testQueryDML() throws SQLException {
+        Connection connection = JDBCUtilsByDruid.getConnect();
+
+        //2. 使用DBUtils 类和接口， 先引入DBUtils相关jar 加入到本项目
+
+        // 3. 创建 QueryRunner
+        QueryRunner queryRunner = new QueryRunner();
+        // 4.就可以执行查询
+//        String sql = "update students set name =? where id = ?";
+//        String sql = "INSERT INTO students VALUES (NULL ,?,?,?,?)";
+        String sql = "delete from students where id =?";
+
+        // 因为返回的是一个对象
+//        int rows = queryRunner.update(connection, sql, "林青霞", 3);
+//        int rows = queryRunner.update(connection, sql, 30,1,"李四",1236547899);
+        int rows = queryRunner.update(connection, sql,  3);
+        System.out.println(rows);
+
+        JDBCUtilsByDruid.close(null, null, connection);
 
     }
 }
