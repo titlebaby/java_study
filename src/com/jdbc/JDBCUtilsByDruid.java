@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 /**
- * 基于druid 数据库连接池 的 工具类
+ * 基于druid 数据库连接池 的 工具类（德鲁伊连接池）
  */
 public class JDBCUtilsByDruid {
     private static DataSource ds;
