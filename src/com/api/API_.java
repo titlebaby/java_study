@@ -1,5 +1,7 @@
 package com.api;
 
+import org.junit.Test;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -20,5 +22,16 @@ public class API_ {
 
         String hostName = byName1.getHostName();
         System.out.println(hostName);
+    }
+    @Test
+    public void test01() {
+        char c1 = 'a';
+        char c2 = '\t';
+        char c3 = '韩';
+        char c4 = 97;
+        System.out.println(c1);
+        System.out.println(c2);
+        System.out.println(c3);
+        System.out.println(c4);
     }
 }
